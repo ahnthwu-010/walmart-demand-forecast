@@ -15,15 +15,6 @@ LOG_PATH = BASE / "reports" / "refresh_log.txt"
 
 LOG_PATH = BASE / "reports" / "refresh_log.txt"
 
-st.write("DEBUG BASE:", BASE)
-st.write("DEBUG BASE EXISTS:", BASE.exists())
-
-st.write("DEBUG FORECAST:", FORECAST_PATH)
-st.write("DEBUG FORECAST EXISTS:", FORECAST_PATH.exists())
-
-st.write("DEBUG HIST:", HIST_PATH)
-st.write("DEBUG HIST EXISTS:", HIST_PATH.exists())
-
 # ============================================================
 # CUSTOM CSS 
 # ============================================================
@@ -129,11 +120,7 @@ def load_forecast():
 def load_historical():
     import duckdb
 
-    st.write("DEBUG: START DUCKDB")
-
     con = duckdb.connect(database=":memory:")
-
-    st.write("DEBUG: DUCKDB CONNECT OK")
 
     df = con.execute(
         f"""
@@ -141,8 +128,6 @@ def load_historical():
         FROM read_parquet('{HIST_PATH.as_posix()}')
         """
     ).df()
-
-    st.write("DEBUG: DUCKDB READ OK", df.shape)
 
     df['Date'] = pd.to_datetime(df['Date'])
 
