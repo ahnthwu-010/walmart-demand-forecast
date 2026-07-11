@@ -17,8 +17,12 @@ LOG_PATH = BASE / "reports" / "refresh_log.txt"
 
 st.write("DEBUG BASE:", BASE)
 st.write("DEBUG BASE EXISTS:", BASE.exists())
+
 st.write("DEBUG FORECAST:", FORECAST_PATH)
 st.write("DEBUG FORECAST EXISTS:", FORECAST_PATH.exists())
+
+st.write("DEBUG HIST:", HIST_PATH)
+st.write("DEBUG HIST EXISTS:", HIST_PATH.exists())
 
 # ============================================================
 # CUSTOM CSS 
