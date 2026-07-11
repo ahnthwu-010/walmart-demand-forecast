@@ -128,9 +128,24 @@ def load_forecast():
 @st.cache_data(ttl=300)
 def load_historical():
     import duckdb
-    con = duckdb.connect()
-    df = con.execute(f"SELECT * FROM read_parquet('{HIST_PATH}')").df()
+
+    st.write("DEBUG: START DUCKDB")
+
+    con = duckdb.connect(database=":memory:")
+
+    st.write("DEBUG: DUCKDB CONNECT OK")
+
+    df = con.execute(
+        f"""
+        SELECT *
+        FROM read_parquet('{HIST_PATH.as_posix()}')
+        """
+    ).df()
+
+    st.write("DEBUG: DUCKDB READ OK", df.shape)
+
     df['Date'] = pd.to_datetime(df['Date'])
+
     return df
 
 @st.cache_data(ttl=300)
