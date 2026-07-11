@@ -7,10 +7,11 @@ from datetime import datetime
 
 st.set_page_config(page_title="Demand Forecast Ops", layout="wide", page_icon="📦")
 
-BASE = Path("C:/Users/HP/Downloads/DS/da9/walmart-demand-forecast")
-FORECAST_PATH = BASE / "data/processed/production_forecast_ALL_final_v2.csv"
-HIST_PATH = BASE / "data/processed/walmart_clean.parquet"
-LOG_PATH = BASE / "reports/refresh_log.txt"
+BASE = Path(__file__).resolve().parent.parent
+
+FORECAST_PATH = BASE / "data" / "processed" / "production_forecast_ALL_final_v2.csv"
+HIST_PATH = BASE / "data" / "processed" / "walmart_clean.parquet"
+LOG_PATH = BASE / "reports" / "refresh_log.txt"
 
 # ============================================================
 # CUSTOM CSS 
