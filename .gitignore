@@ -1,5 +1,5 @@
 data/raw/
-data/processed/*.parquet 
+# data/processed/*.parquet 
 venv/
 __pycache__/
 *.pyc

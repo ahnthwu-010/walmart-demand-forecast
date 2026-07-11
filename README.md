@@ -88,12 +88,39 @@ Phân tích độ dài chuỗi gián đoạn (streak) cho thấy phần lớn mi
 
 ## 9. Cấu trúc repo
 
+
+```text
 walmart-demand-forecast/
-├── data/               # Dữ liệu gốc và đã xử lý
-├── notebooks/           # EDA, modeling, kiểm định giả định
-├── sql/                 # Feature engineering bằng DuckDB
-├── streamlit_app/        # Dashboard tương tác
-└── reports/              # Biểu đồ, kết quả
+│
+├── data/
+│   ├── raw/                  # Dữ liệu gốc
+│   └── processed/            # Dữ liệu đã làm sạch và feature engineering
+│
+├── notebooks/               # EDA, feature engineering, modeling
+│   ├── 01_eda.ipynb
+│   ├── 02_feature_engineering.ipynb
+│   ├── 03_model_training.ipynb
+│   └── 04_model_evaluation.ipynb
+│
+├── sql/                     # SQL scripts (DuckDB)
+│   ├── create_features.sql
+│   └── analysis.sql
+│
+├── streamlit_app/           # Dashboard tương tác
+│   ├── app.py
+│   ├── pages/
+│   └── assets/
+│
+├── reports/
+│   ├── figures/             # Biểu đồ
+│   └── report.md            # Báo cáo kết quả
+│
+├── models/                  # Mô hình đã huấn luyện
+│
+├── requirements.txt         # Danh sách thư viện
+├── README.md
+└── .gitignore
+```
 
 ## 10. Demo trực tiếp
 
