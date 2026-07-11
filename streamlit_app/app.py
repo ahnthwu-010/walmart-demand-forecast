@@ -13,6 +13,13 @@ FORECAST_PATH = BASE / "data" / "processed" / "production_forecast_ALL_final_v2.
 HIST_PATH = BASE / "data" / "processed" / "walmart_clean.parquet"
 LOG_PATH = BASE / "reports" / "refresh_log.txt"
 
+LOG_PATH = BASE / "reports" / "refresh_log.txt"
+
+st.write("DEBUG BASE:", BASE)
+st.write("DEBUG BASE EXISTS:", BASE.exists())
+st.write("DEBUG FORECAST:", FORECAST_PATH)
+st.write("DEBUG FORECAST EXISTS:", FORECAST_PATH.exists())
+
 # ============================================================
 # CUSTOM CSS 
 # ============================================================
