@@ -109,37 +109,39 @@ Với các phòng ban doanh số cực nhỏ, sai số phần trăm (MAPE) có t
 ## 9. Cấu trúc repo
 
 
+# Walmart Demand Forecast
+
+## Project Structure
+
 ```text
 walmart-demand-forecast/
-│
 ├── data/
-│   ├── raw/                  # Dữ liệu gốc
-│   └── processed/            # Dữ liệu đã làm sạch và feature engineering
+│   ├── raw/                              # Dữ liệu gốc Kaggle (không public do dung lượng/license)
+│   └── processed/                        # Dữ liệu đã xử lý, forecast production
+│       └── production_forecast_ALL_final_v2.csv   # File forecast chính thức, dashboard đọc từ đây
 │
-├── notebooks/               # EDA, feature engineering, modeling
-│   ├── 01_eda.ipynb
-│   ├── 02_feature_engineering.ipynb
-│   ├── 03_model_training.ipynb
-│   └── 04_model_evaluation.ipynb
+├── notebooks/                            # Xem notebooks/README.md để biết thứ tự chạy chi tiết
+│   ├── step1_join_and_check.ipynb        # Join dữ liệu, kiểm tra toàn vẹn
+│   ├── step1b_investigate.ipynb          # Điều tra Missing Not At Random (MNAR)
+│   ├── step2_eda_stationarity.ipynb      # ADF/KPSS, decomposition, phát hiện lệch nhãn Christmas
+│   ├── step4_batch_sarimax.py            # Backtest SARIMAX hàng loạt (Nhánh A)
+│   ├── step4_investigate_bias.py         # Điều tra phân phối MAPE bất thường
+│   ├── step5_analyze_nhanh_a_results.ipynb   # Phân tích kết quả Nhánh A
+│   ├── step5_lightgbm_nhanh_bc.ipynb     # Backtest LightGBM (Nhánh B+C)
+│   ├── step6_production_forecast.py      # Forecast production Nhánh A
+│   ├── step7_production_forecast_bc.py   # Forecast production Nhánh B+C
+│   ├── step8_add_pi_bc.py                # Bootstrap Prediction Interval cho Nhánh B+C
+│   └── step9_final_sanity_check.ipynb    # Kiểm tra toàn vẹn file forecast cuối cùng
 │
-├── sql/                     # SQL scripts (DuckDB)
-│   ├── create_features.sql
-│   └── analysis.sql
+├── sql/
+│   └── 02_features_nhanh_bc.sql          # Feature engineering (lag, rolling, seasonal flags) bằng DuckDB
 │
-├── streamlit_app/           # Dashboard tương tác
-│   ├── app.py
-│   ├── pages/
-│   └── assets/
+├── streamlit_app/
+│   └── app.py                            # Dashboard tương tác
 │
-├── reports/
-│   ├── figures/             # Biểu đồ
-│   └── report.md            # Báo cáo kết quả
-│
-├── models/                  # Mô hình đã huấn luyện
-│
-├── requirements.txt         # Danh sách thư viện
-├── README.md
-└── .gitignore
+├── reports/                              # Biểu đồ và log
+├── requirements.txt
+└── README.md
 ```
 
 ## 10. Demo trực tiếp
