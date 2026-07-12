@@ -144,7 +144,7 @@ walmart-demand-forecast/
 
 ## 10. Demo trực tiếp
 
-🔗 [Link Streamlit App] *[ https://walmart-demand-forecast-wfwsoivtbrhacwufwjmdph.streamlit.app/]*
+🔗 [Link Streamlit App] *[ https://walmart-demand-forecast-jhkhxzynmevejab2hb9r5f.streamlit.app/]*
 
 📓 [Notebook đầy đủ] *[https://github.com/ahnthwu-010/walmart-demand-forecast ]*
 
