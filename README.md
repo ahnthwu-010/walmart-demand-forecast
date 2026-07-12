@@ -42,22 +42,42 @@ Không phải mọi phòng ban đều dự báo được bằng cùng một phư
 
 ## 4. Insight kinh doanh nổi bật
 
-**a. Độ chính xác tỷ lệ thuận với quy mô doanh số**
+### 4.1. Phân bổ nguồn lực theo quy mô — nơi đáng đầu tư nhất
 
-| Quy mô phòng ban | MAPE trung vị | Độ rộng PI 95% |
-|---|---|---|
-| Q4 (lớn nhất) | 6.6% | 28% giá trị dự báo |
-| Q1 (nhỏ nhất) | 25.3% | 120% giá trị dự báo |
+| Nhóm quy mô | % số phòng ban | % tổng doanh thu | MAPE trung vị | Độ rộng CI 95% |
+|---|---|---|---|---|
+| Q4 (lớn nhất) | 25% | **69.0%** | 6.6% | 28% |
+| Q3 | 25% | 21.2% | 9.8% | 44% |
+| Q2 | 25% | 8.1% | 14.3% | 60% |
+| Q1 (nhỏ nhất) | 25% | **1.7%** | 25.3% | 120% |
 
-→ Khuyến nghị: dùng sai số tuyệt đối (USD) thay vì phần trăm khi đánh giá phòng ban nhỏ; ưu tiên đầu tư độ chính xác cho nhóm lớn, nơi 1% sai số tương đương giá trị USD lớn nhất.
+**Hành động cụ thể:** 25% phòng ban lớn nhất (Q4) chiếm tới **69% tổng doanh thu** của toàn bộ Nhánh A, đồng thời có độ chính xác dự báo cao nhất (MAPE 6.6%, CI hẹp nhất 28%) — đây là nơi tập trung nhân sự Inventory Planning cấp cao mang lại ROI rõ ràng nhất, vì sai số 1% ở nhóm này tương đương giá trị USD lớn hơn nhiều so với sai số 1% ở nhóm nhỏ.
 
-**b. Cờ `IsHoliday` gốc của Walmart bị lệch nhãn cho Christmas**
+Ngược lại, 25% phòng ban nhỏ nhất (Q1) chỉ chiếm **1.7% doanh thu** nhưng có CI rộng gấp hơn 4 lần (120% so với 28%) — đầu tư công sức tinh chỉnh model cho nhóm này mang lại lợi ích không tương xứng với công sức. Khuyến nghị: quản lý nhóm Q1 bằng quy tắc đơn giản (% dự phòng cố định, VD +30% so với dự báo), dành nguồn lực kỹ thuật cho Q3-Q4 — nơi chiếm 90% doanh thu.
 
-Tuần được đánh dấu lễ (chứa 31/12) thực chất là tuần *sau* cao điểm mua sắm — tuần thật sự tăng vọt là tuần chứa 24/12 (**+70.3%** so với tuần thường, vượt cả Thanksgiving +42.8%). Phát hiện qua kiểm tra thủ công 3 tuần lân cận mỗi năm, xác nhận nhất quán ở cả 2010 và 2011.
+### 4.2. Phát hiện vận hành: nhãn ngày lễ hiện tại đang gây quyết định sai
 
-**c. 68% phòng ban "thiếu dữ liệu" thực chất là đặc tính kinh doanh, không phải lỗi**
+Hệ thống dữ liệu Walmart gắn cờ "tuần lễ Giáng Sinh" vào tuần chứa 31/12 — nhưng phân tích cho thấy **tuần chứa 24/12 mới là tuần cao điểm thật** (+70.3% so với tuần thường, vượt cả Thanksgiving +42.8%), còn tuần được gắn cờ chính thức thực chất **thấp hơn cả tuần bình thường** (-7.7%).
 
-Phân tích độ dài chuỗi gián đoạn (streak) cho thấy phần lớn missing weeks đến từ các phòng ban dừng hoạt động theo mùa (VD: sản phẩm theo lễ hội), lặp lại đúng chu kỳ mỗi năm — không phải dữ liệu bị mất ngẫu nhiên.
+**Hành động cụ thể:** Nếu team Merchandising/Supply Chain hiện đang dùng cờ `IsHoliday` gốc để lên kế hoạch nhập hàng trước Giáng Sinh, họ đang chuẩn bị hàng **sai thời điểm 1 tuần** — nhập hàng dồn vào đúng tuần nhu cầu đã giảm, trong khi tuần thực sự cần hàng (chứa 24/12) lại không được đánh dấu ưu tiên. Khuyến nghị: cập nhật lại quy tắc gắn cờ ngày lễ trong hệ thống vận hành, dùng `is_Christmas_true_peak` (tuần chứa 24/12) thay vì nhãn gốc.
+
+### 4.3. 68% "dữ liệu thiếu" thực chất là tín hiệu kinh doanh, không phải lỗi hệ thống
+
+457/671 phòng ban có khoảng trống dữ liệu dài (>10 tuần liên tục) — không phải do lỗi thu thập, mà do các phòng ban này **chủ động ngừng bán theo mùa**, lặp lại đúng khoảng thời gian mỗi năm (VD: gián đoạn nhất quán vào giai đoạn tháng 4-9 hàng năm ở 1 số phòng ban cụ thể).
+
+**Hành động cụ thể:** đây là cơ hội bị bỏ lỡ cho Merchandising — nếu 457 phòng ban này đang được lên kế hoạch tồn kho như thể chúng hoạt động quanh năm, ngân sách mua hàng đang bị phân bổ sai mùa. Khuyến nghị: rà soát lại chu kỳ mở/đóng của các phòng ban này, đối chiếu với category sản phẩm thực tế (nhiều khả năng là sản phẩm theo mùa/lễ hội) để tối ưu lịch nhập hàng theo đúng cửa sổ hoạt động, thay vì áp dụng chu kỳ tồn kho tiêu chuẩn.
+
+### 4.4. Không phải mọi phòng ban đều đáng đầu tư công nghệ dự báo phức tạp
+
+Với 363 phòng ban quy mô nhỏ/theo mùa, không model nào (kể cả LightGBM) thắng nổi phương pháp đơn giản nhất (seasonal naive — dự báo bằng đúng doanh số cùng kỳ năm trước).
+
+**Hành động cụ thể:** đây là khuyến nghị tiết kiệm chi phí vận hành rõ ràng — với nhóm 363 phòng ban này, không cần đầu tư hạ tầng tính toán, không cần retrain model định kỳ. Chỉ cần 1 quy tắc đơn giản (tham chiếu cùng kỳ năm trước) đã đủ tốt, giải phóng nguồn lực kỹ thuật để tập trung vào nhóm 2,968 phòng ban (A+B) nơi model phức tạp thực sự tạo ra giá trị.
+
+### 4.5. Cảnh báo về độ tin cậy khi báo cáo theo phần trăm
+
+Với các phòng ban doanh số cực nhỏ, sai số phần trăm (MAPE) có thể tăng vọt phi thực tế (lên đến hàng nghìn %) chỉ do bản chất toán học khi mẫu số gần 0 — không phản ánh model tệ.
+
+**Hành động cụ thể:** nếu ban lãnh đạo yêu cầu báo cáo "độ chính xác dự báo" theo phần trăm trung bình toàn công ty, con số đó **dễ bị hiểu sai** nếu tính bằng mean thay vì median/WAPE. Khuyến nghị chuẩn hóa cách báo cáo nội bộ: dùng WAPE (weighted) cho báo cáo tổng hợp, dùng sai số tuyệt đối USD cho các phòng ban dưới ngưỡng doanh số nhất định (đề xuất <$100/tuần), tránh quyết định sai vì tin vào con số phần trăm bị outlier chi phối.
 
 ## 5. Kiểm định giả định thống kê — không dừng ở accuracy
 
@@ -66,7 +86,7 @@ Phân tích độ dài chuỗi gián đoạn (streak) cho thấy phần lớn mi
 - **Residual diagnostics:** Ljung-Box xác nhận residual là white noise sau khi loại bỏ 55 quan sát đầu (artifact khởi tạo Kalman filter, xác nhận qua thực nghiệm kurtosis giảm từ 38.4 xuống 1.29).
 - **Normality:** Shapiro-Wilk ban đầu bác bỏ mạnh → chọn Bootstrap Prediction Interval thay vì CI dựa trên phân phối chuẩn.
 
-## 6. Những gì đã thử và KHÔNG hiệu quả — báo cáo trung thực
+## 6. Những gì đã thử và KHÔNG hiệu quả 
 
 Đây là phần thường bị bỏ qua trong các báo cáo phân tích, nhưng quan trọng để đánh giá đúng độ tin cậy của phương pháp:
 
@@ -74,7 +94,7 @@ Phân tích độ dài chuỗi gián đoạn (streak) cho thấy phần lớn mi
 - **LightGBM cho toàn bộ nhóm theo mùa (B+C)** → chỉ thắng naive ở nhóm doanh số lớn (Q4); thua rõ rệt ở Q1-Q3 do dữ liệu quá thưa để học tốt hơn baseline.
 - **MAPE làm thước đo tổng hợp duy nhất** → phân phối lệch cực mạnh do một số phòng ban có doanh số gần 0 (mẫu số MAPE không ổn định về mặt toán học). Chuyển sang dùng median và WAPE, báo cáo tách riêng nhóm doanh số cực nhỏ.
 
-## 7. Giới hạn (Limitations)
+## 7. Limitations
 
 - **Không kiểm chứng được stockout:** dataset không có cột tồn kho, giả định sales ≈ demand có thể không đúng ở các phòng ban thường xuyên hết hàng.
 - **Prediction Interval của nhóm B+C dùng residual gộp (pooled), không riêng từng phòng ban** — do mỗi phòng ban trong nhóm này có quá ít quan sát test để bootstrap ổn định riêng lẻ. PI phản ánh mức độ bất định trung bình của nhóm, không phải đặc thù từng phòng ban cụ thể.
@@ -124,7 +144,7 @@ walmart-demand-forecast/
 
 ## 10. Demo trực tiếp
 
-🔗 [Link Streamlit App] *(cập nhật sau khi deploy, kiểm tra link còn hoạt động trước khi public)*
+🔗 [Link Streamlit App] *[ https://walmart-demand-forecast-wfwsoivtbrhacwufwjmdph.streamlit.app/]*
 
-📓 [Notebook đầy đủ] *(link GitHub)*
+📓 [Notebook đầy đủ] *[https://github.com/ahnthwu-010/walmart-demand-forecast ]*
 
