@@ -13,7 +13,14 @@ FORECAST_PATH = BASE / "data" / "processed" / "production_forecast_ALL_final_v2.
 HIST_PATH = BASE / "data" / "processed" / "walmart_clean.parquet"
 LOG_PATH = BASE / "reports" / "refresh_log.txt"
 
-LOG_PATH = BASE / "reports" / "refresh_log.txt"
+LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+if not LOG_PATH.exists():
+    LOG_PATH.write_text(
+        f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - INFO - "
+        f"Dashboard khởi tạo lần đầu. Chưa có lần tự động refresh nào chạy.\n",
+        encoding='utf-8'
+    )
+
 
 # ============================================================
 # CUSTOM CSS 
@@ -306,11 +313,11 @@ else:
 # FOOTER
 # ============================================================
 st.sidebar.markdown("---")
-if LOG_PATH.exists():
+try:
     last_lines = LOG_PATH.read_text(encoding='utf-8').strip().split("\n")[-3:]
     st.sidebar.caption("**TRẠNG THÁI TỰ ĐỘNG CẬP NHẬT**")
     for line in last_lines:
         display_line = line[:60] + "..." if len(line) > 60 else line
         st.sidebar.caption(f"`{display_line}`")
-else:
-    st.sidebar.caption("Chưa có lịch sử tự động cập nhật")
+except Exception:
+    st.sidebar.caption("Không đọc được log cập nhật.")
